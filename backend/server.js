@@ -65,3 +65,15 @@ app.post('/api/reserves', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor EcoVenue en funcionament a http://localhost:${PORT}`);
 });
+// GET: Resum de mètriques globals (SaaS)
+app.get('/api/metriques', (req, res) => {
+  const total_reserves = reserves.length;
+  const ingressos_totals = reserves.reduce((acc, r) => acc + r.preu_total, 0);
+  const co2_total_kg = reserves.reduce((acc, r) => acc + r.co2_total, 0);
+
+  res.status(200).json({
+    total_reserves,
+    ingressos_totals: Number(ingressos_totals.toFixed(2)),
+    co2_total_kg: Number(co2_total_kg.toFixed(2))
+  });
+});

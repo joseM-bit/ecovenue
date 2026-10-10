@@ -18,13 +18,33 @@
   </style>
 </head>
 <body>
+  <!-- 1. Títol Principal -->
   <h1>EcoVenue · Catàleg d'Espais</h1>
   
+  <!-- 2. Banner d'estat de la connexió -->
   <div id="api-status" class="status">Comprovant connexió amb el backend...</div>
 
+  <!-- 3. Dashboard de Mètriques (KPIs) -->
+  <div id="kpi-container" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
+      <h4 style="margin:0; color: #555;">Reserves Totals</h4>
+      <p id="kpi-reserves" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0;">0</p>
+    </div>
+    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
+      <h4 style="margin:0; color: #555;">Facturació Total</h4>
+      <p id="kpi-facturacio" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0;">0.00 €</p>
+    </div>
+    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
+      <h4 style="margin:0; color: #555;">Impacte CO₂ Registrat</h4>
+      <p id="kpi-co2" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0; color: #157347;">0.00 kg</p>
+    </div>
+  </div>
+
+  <!-- 4. Catàleg d'Espais -->
   <h2>Espais disponibles</h2>
   <div id="llista-espais">Carregant espais...</div>
 
+  <!-- 5. Formulari de Reserva -->
   <h2>Realitzar una Reserva</h2>
   <form id="form-reserva">
     <label>Espai:</label>

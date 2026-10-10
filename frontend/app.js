@@ -43,7 +43,17 @@ function carregarEspais() {
       document.getElementById('llista-espais').innerHTML = "<p>Error en carregar la llista d'espais.</p>";
     });
 }
-
+// Carregar i renderitzar mètriques globals
+function carregarMetriques() {
+  fetch(`${API_URL}/api/metriques`)
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById('kpi-reserves').textContent = data.total_reserves;
+      document.getElementById('kpi-facturacio').textContent = `${data.ingressos_totals.toFixed(2)} €`;
+      document.getElementById('kpi-co2').textContent = `${data.co2_total_kg.toFixed(2)} kg`;
+    })
+    .catch(err => console.error('Error carregant mètriques:', err));
+}
 // 3. Processar la reserva (POST)
 document.getElementById('form-reserva').addEventListener('submit', (e) => {
   e.preventDefault();
@@ -80,3 +90,4 @@ document.getElementById('form-reserva').addEventListener('submit', (e) => {
 });
 
 carregarEspais();
+carregarMetriques();
