@@ -3,68 +3,363 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EcoVenue · Cerca d'Espais Sostenibles</title>
-  <style>
-    body { font-family: system-ui, sans-serif; max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
-    .card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; }
-    .badge { background: #e2f5ea; color: #157347; padding: 0.2rem 0.5rem; border-radius: 4px; font-weight: bold; }
-    .status { padding: 0.5rem; background: #f8f9fa; margin-bottom: 1rem; border-radius: 4px; border-left: 4px solid #0d6efd; }
-    form { background: #f1f3f5; padding: 1rem; border-radius: 8px; display: flex; flex-direction: column; gap: 0.8rem; }
-    input, select, button { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; font-size: 1rem; }
-    button { background: #198754; color: white; font-weight: bold; cursor: pointer; border: none; }
-    .msg { padding: 0.5rem; border-radius: 4px; display: none; }
-    .msg.ok { background: #d1e7dd; color: #0f5132; display: block; }
-    .msg.error { background: #f8d7da; color: #842029; display: block; }
-  </style>
+  <title>L'Hivernacle — EcoVenue Barcelona</title>
+
+  <!-- Tipografías de Figma: Lora (Editorial) e Inter (UI) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- 1. Títol Principal -->
-  <h1>EcoVenue · Catàleg d'Espais</h1>
-  
-  <!-- 2. Banner d'estat de la connexió -->
-  <div id="api-status" class="status">Comprovant connexió amb el backend...</div>
 
-  <!-- 3. Dashboard de Mètriques (KPIs) -->
-  <div id="kpi-container" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
-    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
-      <h4 style="margin:0; color: #555;">Reserves Totals</h4>
-      <p id="kpi-reserves" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0;">0</p>
+  <!-- Navegación Superior -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">ecovenue</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="#" class="nav-link active">Descobreix espais</a>
+        <a href="#" class="nav-link">Com funciona</a>
+        <a href="#" class="nav-link">El nostre compromís</a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="#" class="link-secondary">Publica el teu espai</a>
+        <a href="#" class="btn-outline-sm">👤 Inicia sessió</a>
+      </div>
     </div>
-    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
-      <h4 style="margin:0; color: #555;">Facturació Total</h4>
-      <p id="kpi-facturacio" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0;">0.00 €</p>
+  </header>
+
+  <!-- Breadcrumb i Títol -->
+  <div class="page-header container">
+    <div class="breadcrumb">
+      <a href="#">← Torna als espais</a> <span>/ Barcelona / L'Hivernacle</span>
     </div>
-    <div class="card" style="flex: 1; text-align: center; margin-bottom: 0;">
-      <h4 style="margin:0; color: #555;">Impacte CO₂ Registrat</h4>
-      <p id="kpi-co2" style="font-size: 1.8rem; font-weight: bold; margin: 0.5rem 0 0 0; color: #157347;">0.00 kg</p>
+
+    <div class="title-row">
+      <div>
+        <h1 class="main-title">L'Hivernacle</h1>
+        <p class="subtitle">Sants · Barcelona &nbsp;|&nbsp; Fins a 80 persones</p>
+      </div>
+      <div class="action-buttons">
+        <button class="btn-pill">🔗 Compartir</button>
+        <button class="btn-pill">♡ Desa l'espai</button>
+      </div>
     </div>
   </div>
 
-  <!-- 4. Catàleg d'Espais -->
-  <h2>Espais disponibles</h2>
-  <div id="llista-espais">Carregant espais...</div>
+  <!-- Hero: Imagen + Tarjeta Editorial -->
+  <section class="hero-section container">
+    <div class="hero-image-box">
+      <span class="badge-overlay">Llum natural · Jardí interior</span>
+      <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80" alt="L'Hivernacle Barcelona" class="hero-img">
+    </div>
 
-  <!-- 5. Formulari de Reserva -->
-  <h2>Realitzar una Reserva</h2>
-  <form id="form-reserva">
-    <label>Espai:</label>
-    <select id="reserva-espai" required>
-      <option value="">Carregant espais...</option>
-    </select>
+    <div class="editorial-card">
+      <span class="tagline">UN RESPIR ENMIG DE LA CIUTAT</span>
+      <h2 class="editorial-title">Trobades que floreixen.</h2>
+      <p class="editorial-body">
+        Un jardí sota una coberta de vidre, llum que acompanya i taules per compartir idees. Un espai amb calma per a la teva propera trobada d'equip.
+      </p>
 
-    <label>Data:</label>
-    <input type="date" id="reserva-data" required>
+      <div class="editorial-price-row">
+        <div>
+          <span class="price-large">95 €</span>
+          <span class="price-unit">/ hora</span>
+        </div>
+        <a href="#detalls-espai" class="link-muted">Més informació</a>
+      </div>
 
-    <label>Hores:</label>
-    <input type="number" id="reserva-hores" min="1" max="12" value="2" required>
+      <div class="co2-badge">
+        <span class="co2-icon">🌱</span>
+        <span>Petjada estimada: <strong>2,1 kg CO₂e/h</strong></span>
+      </div>
+    </div>
+  </section>
 
-    <label>Email de contacte:</label>
-    <input type="email" id="reserva-email" placeholder="usuari@empresa.com" required>
+  <!-- Contenido Principal: 2 Columnas -->
+  <main class="main-layout container">
+    
+    <!-- Columna Izquierda: Información, Equipamiento y Calendario -->
+    <div class="main-details" id="detalls-espai">
+      
+      <section class="info-block">
+        <h2 class="section-title">Un espai per compartir, amb consciència</h2>
+        <p class="text-description">
+          L'Hivernacle combina la frescor d'un jardí interior amb la comoditat d'una sala preparada per reunir-vos. El mobiliari es pot adaptar a la vostra trobada; el càtering i l'equip audiovisual es poden afegir a la sol·licitud.
+        </p>
 
-    <button type="submit">Confirmar Reserva</button>
-  </form>
+        <h3 class="subsection-title">Què inclou l'espai?</h3>
+        <div class="amenities-grid">
+          <div class="amenity-item">
+            <span class="amenity-icon">🪴</span>
+            <div>
+              <strong>Jardí interior</strong>
+              <p>Vegetació i llum natural</p>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <span class="amenity-icon">🪑</span>
+            <div>
+              <strong>Mobiliari inclòs</strong>
+              <p>Taules i cadires per a 80</p>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <span class="amenity-icon">📶</span>
+            <div>
+              <strong>Connexió Wi-Fi</strong>
+              <p>Per treballar i presentar</p>
+            </div>
+          </div>
+          <div class="amenity-item">
+            <span class="amenity-icon">📐</span>
+            <div>
+              <strong>Distribució flexible</strong>
+              <p>Taller, reunió o celebració</p>
+            </div>
+          </div>
+        </div>
 
-  <div id="missatge-reserva" class="msg"></div>
+        <div class="location-note">
+          📍 <strong>Sants · Barcelona</strong> — Fàcil accés amb transport públic. S'ofereix opció de servei amb la confirmació.
+        </div>
+      </section>
+
+      <!-- Selector de Fecha y Franjas Horarias -->
+      <section class="calendar-section">
+        <h2 class="section-title">Troba el moment per reunir-vos</h2>
+        <p class="text-description">Consulta els dies i les hores. Hem seleccionat el <strong>23 d'octubre</strong>, de 10 a 14 h.</p>
+
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <h3>Octubre 2026</h3>
+            <div class="calendar-nav">
+              <button class="btn-icon">‹</button>
+              <button class="btn-icon">›</button>
+            </div>
+          </div>
+
+          <!-- Muestra del Calendario -->
+          <div class="calendar-grid">
+            <span class="day-name">Dl</span><span class="day-name">Dt</span><span class="day-name">Dc</span><span class="day-name">Dj</span><span class="day-name">Dv</span><span class="day-name">Ds</span><span class="day-name">Dg</span>
+            
+            <span class="day muted">28</span><span class="day muted">29</span><span class="day muted">30</span><span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span>
+            <span class="day">5</span><span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day dot-green">10</span><span class="day dot-green">11</span>
+            <span class="day">12</span><span class="day">13</span><span class="day">14</span><span class="day">15</span><span class="day">16</span><span class="day">17</span><span class="day">18</span>
+            <span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day active-day">23</span><span class="day">24</span><span class="day">25</span>
+            <span class="day">26</span><span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span><span class="day">31</span><span class="day muted">1</span>
+          </div>
+
+          <div class="calendar-legend">
+            <span><span class="dot available"></span> Disponible</span>
+            <span><span class="dot occupied"></span> Ocupat</span>
+            <span><span class="dot selected"></span> Seleccionat</span>
+            <span><span class="dot brown"></span> Punt marró: disponibilitat parcial</span>
+          </div>
+
+          <div class="slots-header">
+            <strong>Divendres, 23 d'octubre</strong>
+            <span class="badge-hours">4 hores seleccionades</span>
+          </div>
+
+          <!-- Franjas Horarias -->
+          <div class="slots-grid">
+            <button class="slot occupied">9:00–10:00<br><small>Ocupat</small></button>
+            <button class="slot selected">10:00–11:00<br><small>Seleccionat</small></button>
+            <button class="slot selected">11:00–12:00<br><small>Seleccionat</small></button>
+            <button class="slot selected">12:00–13:00<br><small>Seleccionat</small></button>
+            <button class="slot selected">13:00–14:00<br><small>Seleccionat</small></button>
+            <button class="slot">14:00–15:00<br><small>Disponible</small></button>
+            <button class="slot">15:00–16:00<br><small>Disponible</small></button>
+            <button class="slot">16:00–17:00<br><small>Disponible</small></button>
+            <button class="slot occupied">17:00–18:00<br><small>Ocupat</small></button>
+            <button class="slot occupied">18:00–19:00<br><small>Ocupat</small></button>
+          </div>
+        </div>
+
+        <div class="co2-banner">
+          🌱 <strong>4 hores, una petjada estimada de <span id="co2-total-calc">8,4</span> kg CO₂e</strong>
+          <p>Estima el consum energètic de l'espai. No inclou desplaçaments ni càtering. Dades orientatives.</p>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Columna Derecha: Sidebar Flotante de Reserva (Sticky) -->
+    <aside class="booking-sidebar">
+      <div class="booking-card">
+        <h2 class="sidebar-title">La teva propera trobada</h2>
+        <p class="sidebar-subtitle">Envia una sol·licitud, sense cap pagament ara.</p>
+
+        <form id="form-reserva-figma">
+          <!-- Datos de la Cita -->
+          <div class="form-group">
+            <label>Data de la trobada</label>
+            <input type="text" id="reserva-data" value="2026-10-23" readonly>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Hora d'inici</label>
+              <select id="hora-inici">
+                <option value="10:00" selected>10:00</option>
+                <option value="11:00">11:00</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Hora de finalització</label>
+              <select id="hora-fi">
+                <option value="14:00" selected>14:00</option>
+                <option value="15:00">15:00</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Persones</label>
+              <select id="reserva-persones">
+                <option value="20">20 persones</option>
+                <option value="50" selected>50 persones</option>
+                <option value="80">80 persones</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tipus d'esdeveniment</label>
+              <select id="tipus-esdeveniment">
+                <option selected>Trobada d'equip</option>
+                <option>Taller / Formació</option>
+                <option>Presentació</option>
+              </select>
+            </div>
+          </div>
+
+          <hr class="form-divider">
+
+          <!-- Extras / Opciones -->
+          <h4 class="options-title">Fes-la a la teva mida</h4>
+          
+          <label class="checkbox-card">
+            <input type="checkbox" id="check-catering" checked>
+            <div class="checkbox-content">
+              <div class="checkbox-header">
+                <strong>Càtering ecològic</strong>
+                <span>12 €/persona</span>
+              </div>
+              <p>Fruita de temporada, pa artesà i beguda ecològica.</p>
+            </div>
+          </label>
+
+          <label class="checkbox-card">
+            <input type="checkbox" id="check-audiovisual" checked>
+            <div class="checkbox-content">
+              <div class="checkbox-header">
+                <strong>Equip audiovisual</strong>
+                <span>80 €</span>
+              </div>
+              <p>Projector, pantalla i micròfons. Preu per trobada.</p>
+            </div>
+          </label>
+
+          <hr class="form-divider">
+
+          <!-- Datos de Contacto -->
+          <h4 class="options-title">Com et podem contactar?</h4>
+          
+          <div class="form-group">
+            <label>Nom i cognoms</label>
+            <input type="text" id="reserva-nom" value="Laia Sants" required>
+          </div>
+
+          <div class="form-group">
+            <label>Correu electrònic</label>
+            <input type="email" id="reserva-email" value="laia.sants@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>Telèfon</label>
+            <input type="tel" id="reserva-telefon" value="612 345 678" required>
+          </div>
+
+          <div class="form-group">
+            <label>Explica'ns la teva idea - opcional</label>
+            <textarea id="reserva-notes" rows="2" placeholder="Troba de tot l'equip amb taller de matí. Preferim una distribució en grups i opcions veganes."></textarea>
+          </div>
+
+          <!-- Resumen de Cálculo de Precio -->
+          <div class="summary-box">
+            <h4 class="summary-title">El teu resum</h4>
+            <p class="summary-subtitle" id="summary-meta">23 oct · 10:00-14:00 · 50 persones</p>
+            
+            <div class="summary-line">
+              <span>Espai · <span id="summary-hours">4</span> h × 95 €</span>
+              <span id="summary-price-space">380,00 €</span>
+            </div>
+            <div class="summary-line" id="row-catering">
+              <span>Càtering · <span id="summary-people">50</span> × 12 €</span>
+              <span id="summary-price-catering">600,00 €</span>
+            </div>
+            <div class="summary-line" id="row-audiovisual">
+              <span>Equip audiovisual</span>
+              <span id="summary-price-av">80,00 €</span>
+            </div>
+            
+            <hr class="summary-divider">
+            
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <span id="summary-subtotal">1.060,00 €</span>
+            </div>
+            <div class="summary-line">
+              <span>IVA · 21%</span>
+              <span id="summary-iva">222,60 €</span>
+            </div>
+
+            <div class="summary-total-row">
+              <strong>Total estimat</strong>
+              <strong class="total-price" id="summary-total">1.282,60 €</strong>
+            </div>
+          </div>
+
+          <div class="terms-group">
+            <input type="checkbox" id="check-terms" checked required>
+            <label for="check-terms">He llegit les <a href="#">condicions de reserva</a> i <a href="#">política de privacitat</a>.</label>
+          </div>
+
+          <button type="submit" class="btn-submit-main">Sol·licita la reserva →</button>
+        </form>
+
+        <p class="disclaimer">L'espai confirmarà la disponibilitat i el pressupost abans de formalitzar la reserva.</p>
+        
+        <div class="help-box">
+          <p><strong>Tens algun dubte abans de reservar?</strong><br>
+          Escriu-nos: <a href="mailto:hola@ecovenue.example">hola@ecovenue.example</a></p>
+        </div>
+      </div>
+    </aside>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        🌿 <strong>ecovenue</strong> <span>L'espai on comencen les bones trobades.</span>
+      </div>
+      <div class="footer-links">
+        <a href="#">Ajuda</a>
+        <a href="#">Privacitat</a>
+        <a href="#">Condicions</a>
+        <span>© 2026 EcoVenue</span>
+      </div>
+    </div>
+  </footer>
 
   <script src="app.js"></script>
 </body>

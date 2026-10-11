@@ -62,8 +62,8 @@ app.post('/api/reserves', (req, res) => {
   res.status(201).json({ status: 'reserva_creada', reserva: novaReserva });
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor EcoVenue en funcionament a http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Servidor EcoVenue ejecutándose en puerto ${PORT}`);
 });
 // GET: Resum de mètriques globals (SaaS)
 app.get('/api/metriques', (req, res) => {
