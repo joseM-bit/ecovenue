@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'Hivernacle — EcoVenue Barcelona</title>
+  <title>EcoVenue — Gestió Sostenible d'Espais</title>
 
-  <!-- Tipografías de Figma: Lora (Editorial) e Inter (UI) -->
+  <!-- Tipografías: Lora e Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -14,350 +14,378 @@
 </head>
 <body>
 
-  <!-- Navegación Superior -->
+  <!-- Navegación Superior Global -->
   <header class="navbar">
     <div class="nav-container">
-      <div class="brand">
+      <div class="brand" onclick="navegarA('pantalla-1')" style="cursor:pointer;">
         <span class="logo-icon">🌿</span>
         <span class="logo-text">ecovenue</span>
       </div>
 
       <nav class="nav-links">
-        <a href="#" class="nav-link active">Descobreix espais</a>
-        <a href="#" class="nav-link">Com funciona</a>
-        <a href="#" class="nav-link">El nostre compromís</a>
+        <a href="#" id="link-p1" class="nav-link active" onclick="navegarA('pantalla-1')">Catàleg d'espais</a>
+        <a href="#" id="link-p3" class="nav-link" style="display:none;" onclick="navegarA('pantalla-3')">Panell d'Admin</a>
       </nav>
 
       <div class="nav-actions">
-        <a href="#" class="link-secondary">Publica el teu espai</a>
-        <a href="#" class="btn-outline-sm">👤 Inicia sessió</a>
+        <span id="user-display" class="user-badge" style="display:none;"></span>
+        <button id="btn-login-nav" class="btn-outline-sm" onclick="obrirModalAuth()">Iniciar sessió</button>
+        <button id="btn-logout-nav" class="btn-outline-sm" style="display:none;" onclick="tancarSessio()">Tancar sessió</button>
       </div>
     </div>
   </header>
 
-  <!-- Breadcrumb i Títol -->
-  <div class="page-header container">
-    <div class="breadcrumb">
-      <a href="#">← Torna als espais</a> <span>/ Barcelona / L'Hivernacle</span>
-    </div>
+  <!-- ================================================================= -->
+  <!-- PANTALLA 1: CATÀLEG D'ESPAIS (VISTA PÚBLICA)                     -->
+  <!-- ================================================================= -->
+  <section id="pantalla-1" class="view-section">
+    <div class="container hero-catalog">
+      <h1 class="catalog-title">Troba l'espai sostenible ideal per a la teva trobada</h1>
+      <p class="catalog-subtitle">Espais bioclimàtics, eficients i equipats per a esdeveniments amb impacte positiu.</p>
 
-    <div class="title-row">
-      <div>
-        <h1 class="main-title">L'Hivernacle</h1>
-        <p class="subtitle">Sants · Barcelona &nbsp;|&nbsp; Fins a 80 persones</p>
-      </div>
-      <div class="action-buttons">
-        <button class="btn-pill">🔗 Compartir</button>
-        <button class="btn-pill">♡ Desa l'espai</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hero: Imagen + Tarjeta Editorial -->
-  <section class="hero-section container">
-    <div class="hero-image-box">
-      <span class="badge-overlay">Llum natural · Jardí interior</span>
-      <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80" alt="L'Hivernacle Barcelona" class="hero-img">
-    </div>
-
-    <div class="editorial-card">
-      <span class="tagline">UN RESPIR ENMIG DE LA CIUTAT</span>
-      <h2 class="editorial-title">Trobades que floreixen.</h2>
-      <p class="editorial-body">
-        Un jardí sota una coberta de vidre, llum que acompanya i taules per compartir idees. Un espai amb calma per a la teva propera trobada d'equip.
-      </p>
-
-      <div class="editorial-price-row">
-        <div>
-          <span class="price-large">95 €</span>
-          <span class="price-unit">/ hora</span>
+      <!-- Cercador / Filtres -->
+      <div class="search-filter-bar">
+        <div class="filter-group">
+          <label>Data</label>
+          <input type="date" id="filtre-data">
         </div>
-        <a href="#detalls-espai" class="link-muted">Més informació</a>
+        <div class="filter-group">
+          <label>Aforament mínim</label>
+          <select id="filtre-aforament">
+            <option value="0">Tots els aforaments</option>
+            <option value="20">Fins a 20 persones</option>
+            <option value="50">Fins a 50 persones</option>
+            <option value="100">Més de 50 persones</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Tipus d'esdeveniment</label>
+          <select id="filtre-tipus">
+            <option value="">Tots els tipus</option>
+            <option value="reunio">Reunió / Taller</option>
+            <option value="conferencia">Conferència</option>
+            <option value="corporatiu">Esdeveniment corporatiu</option>
+          </select>
+        </div>
+        <button class="btn-search" onclick="filtrarEspais()">🔍 Cerca espais</button>
       </div>
+    </div>
 
-      <div class="co2-badge">
-        <span class="co2-icon">🌱</span>
-        <span>Petjada estimada: <strong>2,1 kg CO₂e/h</strong></span>
+    <!-- Graella de Targetes d'Espais -->
+    <div class="container catalog-grid-section">
+      <h2 class="section-title">Espais disponibles</h2>
+      <div id="grid-cataleg" class="catalog-grid">
+        <!-- Es carregarà dinàmicament des de app.js -->
       </div>
     </div>
   </section>
 
-  <!-- Contenido Principal: 2 Columnas -->
-  <main class="main-layout container">
-    
-    <!-- Columna Izquierda: Información, Equipamiento y Calendario -->
-    <div class="main-details" id="detalls-espai">
-      
-      <section class="info-block">
-        <h2 class="section-title">Un espai per compartir, amb consciència</h2>
-        <p class="text-description">
-          L'Hivernacle combina la frescor d'un jardí interior amb la comoditat d'una sala preparada per reunir-vos. El mobiliari es pot adaptar a la vostra trobada; el càtering i l'equip audiovisual es poden afegir a la sol·licitud.
-        </p>
+  <!-- ================================================================= -->
+  <!-- PANTALLA 2: FITXA DE LA SALA I RESERVA                           -->
+  <!-- ================================================================= -->
+  <section id="pantalla-2" class="view-section" style="display:none;">
+    <div class="page-header container">
+      <div class="breadcrumb">
+        <a href="#" onclick="navegarA('pantalla-1')">← Torna al catàleg</a> <span>/ Barcelona / <strong id="detall-nom-breadcrumb">L'Hivernacle</strong></span>
+      </div>
 
-        <h3 class="subsection-title">Què inclou l'espai?</h3>
-        <div class="amenities-grid">
-          <div class="amenity-item">
-            <span class="amenity-icon">🪴</span>
-            <div>
-              <strong>Jardí interior</strong>
-              <p>Vegetació i llum natural</p>
-            </div>
-          </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">🪑</span>
-            <div>
-              <strong>Mobiliari inclòs</strong>
-              <p>Taules i cadires per a 80</p>
-            </div>
-          </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">📶</span>
-            <div>
-              <strong>Connexió Wi-Fi</strong>
-              <p>Per treballar i presentar</p>
-            </div>
-          </div>
-          <div class="amenity-item">
-            <span class="amenity-icon">📐</span>
-            <div>
-              <strong>Distribució flexible</strong>
-              <p>Taller, reunió o celebració</p>
-            </div>
-          </div>
+      <div class="title-row">
+        <div>
+          <h1 class="main-title" id="detall-nom-espai">L'Hivernacle</h1>
+          <p class="subtitle" id="detall-ubicacio">Sants · Barcelona &nbsp;|&nbsp; Fins a 80 persones</p>
         </div>
-
-        <div class="location-note">
-          📍 <strong>Sants · Barcelona</strong> — Fàcil accés amb transport públic. S'ofereix opció de servei amb la confirmació.
+        <div class="action-buttons">
+          <button class="btn-pill">🔗 Compartir</button>
+          <button class="btn-pill">♡ Desa l'espai</button>
         </div>
-      </section>
-
-      <!-- Selector de Fecha y Franjas Horarias -->
-      <section class="calendar-section">
-        <h2 class="section-title">Troba el moment per reunir-vos</h2>
-        <p class="text-description">Consulta els dies i les hores. Hem seleccionat el <strong>23 d'octubre</strong>, de 10 a 14 h.</p>
-
-        <div class="calendar-card">
-          <div class="calendar-header">
-            <h3>Octubre 2026</h3>
-            <div class="calendar-nav">
-              <button class="btn-icon">‹</button>
-              <button class="btn-icon">›</button>
-            </div>
-          </div>
-
-          <!-- Muestra del Calendario -->
-          <div class="calendar-grid">
-            <span class="day-name">Dl</span><span class="day-name">Dt</span><span class="day-name">Dc</span><span class="day-name">Dj</span><span class="day-name">Dv</span><span class="day-name">Ds</span><span class="day-name">Dg</span>
-            
-            <span class="day muted">28</span><span class="day muted">29</span><span class="day muted">30</span><span class="day">1</span><span class="day">2</span><span class="day">3</span><span class="day">4</span>
-            <span class="day">5</span><span class="day">6</span><span class="day">7</span><span class="day">8</span><span class="day">9</span><span class="day dot-green">10</span><span class="day dot-green">11</span>
-            <span class="day">12</span><span class="day">13</span><span class="day">14</span><span class="day">15</span><span class="day">16</span><span class="day">17</span><span class="day">18</span>
-            <span class="day">19</span><span class="day">20</span><span class="day">21</span><span class="day">22</span><span class="day active-day">23</span><span class="day">24</span><span class="day">25</span>
-            <span class="day">26</span><span class="day">27</span><span class="day">28</span><span class="day">29</span><span class="day">30</span><span class="day">31</span><span class="day muted">1</span>
-          </div>
-
-          <div class="calendar-legend">
-            <span><span class="dot available"></span> Disponible</span>
-            <span><span class="dot occupied"></span> Ocupat</span>
-            <span><span class="dot selected"></span> Seleccionat</span>
-            <span><span class="dot brown"></span> Punt marró: disponibilitat parcial</span>
-          </div>
-
-          <div class="slots-header">
-            <strong>Divendres, 23 d'octubre</strong>
-            <span class="badge-hours">4 hores seleccionades</span>
-          </div>
-
-          <!-- Franjas Horarias -->
-          <div class="slots-grid">
-            <button class="slot occupied">9:00–10:00<br><small>Ocupat</small></button>
-            <button class="slot selected">10:00–11:00<br><small>Seleccionat</small></button>
-            <button class="slot selected">11:00–12:00<br><small>Seleccionat</small></button>
-            <button class="slot selected">12:00–13:00<br><small>Seleccionat</small></button>
-            <button class="slot selected">13:00–14:00<br><small>Seleccionat</small></button>
-            <button class="slot">14:00–15:00<br><small>Disponible</small></button>
-            <button class="slot">15:00–16:00<br><small>Disponible</small></button>
-            <button class="slot">16:00–17:00<br><small>Disponible</small></button>
-            <button class="slot occupied">17:00–18:00<br><small>Ocupat</small></button>
-            <button class="slot occupied">18:00–19:00<br><small>Ocupat</small></button>
-          </div>
-        </div>
-
-        <div class="co2-banner">
-          🌱 <strong>4 hores, una petjada estimada de <span id="co2-total-calc">8,4</span> kg CO₂e</strong>
-          <p>Estima el consum energètic de l'espai. No inclou desplaçaments ni càtering. Dades orientatives.</p>
-        </div>
-      </section>
-
+      </div>
     </div>
 
-    <!-- Columna Derecha: Sidebar Flotante de Reserva (Sticky) -->
-    <aside class="booking-sidebar">
-      <div class="booking-card">
-        <h2 class="sidebar-title">La teva propera trobada</h2>
-        <p class="sidebar-subtitle">Envia una sol·licitud, sense cap pagament ara.</p>
+    <!-- Hero de la Fitxa -->
+    <section class="hero-section container">
+      <div class="hero-image-box">
+        <span class="badge-overlay">Llum natural · Jardí interior</span>
+        <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1200&q=80" alt="Espai" class="hero-img">
+      </div>
 
-        <form id="form-reserva-figma">
-          <!-- Datos de la Cita -->
-          <div class="form-group">
-            <label>Data de la trobada</label>
-            <input type="text" id="reserva-data" value="2026-10-23" readonly>
+      <div class="editorial-card">
+        <span class="tagline">UN RESPIR ENMIG DE LA CIUTAT</span>
+        <h2 class="editorial-title">Trobades que floreixen.</h2>
+        <p class="editorial-body">Un jardí sota una coberta de vidre, llum que acompanya i taules per compartir idees.</p>
+
+        <div class="editorial-price-row">
+          <div>
+            <span class="price-large" id="detall-preu-hora">95 €</span>
+            <span class="price-unit">/ hora</span>
           </div>
+        </div>
 
-          <div class="form-row">
-            <div class="form-group">
-              <label>Hora d'inici</label>
-              <select id="hora-inici">
-                <option value="10:00" selected>10:00</option>
-                <option value="11:00">11:00</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Hora de finalització</label>
-              <select id="hora-fi">
-                <option value="14:00" selected>14:00</option>
-                <option value="15:00">15:00</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label>Persones</label>
-              <select id="reserva-persones">
-                <option value="20">20 persones</option>
-                <option value="50" selected>50 persones</option>
-                <option value="80">80 persones</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Tipus d'esdeveniment</label>
-              <select id="tipus-esdeveniment">
-                <option selected>Trobada d'equip</option>
-                <option>Taller / Formació</option>
-                <option>Presentació</option>
-              </select>
-            </div>
-          </div>
-
-          <hr class="form-divider">
-
-          <!-- Extras / Opciones -->
-          <h4 class="options-title">Fes-la a la teva mida</h4>
-          
-          <label class="checkbox-card">
-            <input type="checkbox" id="check-catering" checked>
-            <div class="checkbox-content">
-              <div class="checkbox-header">
-                <strong>Càtering ecològic</strong>
-                <span>12 €/persona</span>
-              </div>
-              <p>Fruita de temporada, pa artesà i beguda ecològica.</p>
-            </div>
-          </label>
-
-          <label class="checkbox-card">
-            <input type="checkbox" id="check-audiovisual" checked>
-            <div class="checkbox-content">
-              <div class="checkbox-header">
-                <strong>Equip audiovisual</strong>
-                <span>80 €</span>
-              </div>
-              <p>Projector, pantalla i micròfons. Preu per trobada.</p>
-            </div>
-          </label>
-
-          <hr class="form-divider">
-
-          <!-- Datos de Contacto -->
-          <h4 class="options-title">Com et podem contactar?</h4>
-          
-          <div class="form-group">
-            <label>Nom i cognoms</label>
-            <input type="text" id="reserva-nom" value="Laia Sants" required>
-          </div>
-
-          <div class="form-group">
-            <label>Correu electrònic</label>
-            <input type="email" id="reserva-email" value="laia.sants@example.com" required>
-          </div>
-
-          <div class="form-group">
-            <label>Telèfon</label>
-            <input type="tel" id="reserva-telefon" value="612 345 678" required>
-          </div>
-
-          <div class="form-group">
-            <label>Explica'ns la teva idea - opcional</label>
-            <textarea id="reserva-notes" rows="2" placeholder="Troba de tot l'equip amb taller de matí. Preferim una distribució en grups i opcions veganes."></textarea>
-          </div>
-
-          <!-- Resumen de Cálculo de Precio -->
-          <div class="summary-box">
-            <h4 class="summary-title">El teu resum</h4>
-            <p class="summary-subtitle" id="summary-meta">23 oct · 10:00-14:00 · 50 persones</p>
-            
-            <div class="summary-line">
-              <span>Espai · <span id="summary-hours">4</span> h × 95 €</span>
-              <span id="summary-price-space">380,00 €</span>
-            </div>
-            <div class="summary-line" id="row-catering">
-              <span>Càtering · <span id="summary-people">50</span> × 12 €</span>
-              <span id="summary-price-catering">600,00 €</span>
-            </div>
-            <div class="summary-line" id="row-audiovisual">
-              <span>Equip audiovisual</span>
-              <span id="summary-price-av">80,00 €</span>
-            </div>
-            
-            <hr class="summary-divider">
-            
-            <div class="summary-line">
-              <span>Subtotal</span>
-              <span id="summary-subtotal">1.060,00 €</span>
-            </div>
-            <div class="summary-line">
-              <span>IVA · 21%</span>
-              <span id="summary-iva">222,60 €</span>
-            </div>
-
-            <div class="summary-total-row">
-              <strong>Total estimat</strong>
-              <strong class="total-price" id="summary-total">1.282,60 €</strong>
-            </div>
-          </div>
-
-          <div class="terms-group">
-            <input type="checkbox" id="check-terms" checked required>
-            <label for="check-terms">He llegit les <a href="#">condicions de reserva</a> i <a href="#">política de privacitat</a>.</label>
-          </div>
-
-          <button type="submit" class="btn-submit-main">Sol·licita la reserva →</button>
-        </form>
-
-        <p class="disclaimer">L'espai confirmarà la disponibilitat i el pressupost abans de formalitzar la reserva.</p>
-        
-        <div class="help-box">
-          <p><strong>Tens algun dubte abans de reservar?</strong><br>
-          Escriu-nos: <a href="mailto:hola@ecovenue.example">hola@ecovenue.example</a></p>
+        <div class="co2-badge">
+          <span class="co2-icon">🌱</span>
+          <span>Petjada estimada: <strong id="detall-co2-hora">2,1 kg CO₂e/h</strong></span>
         </div>
       </div>
-    </aside>
+    </section>
 
-  </main>
+    <!-- Contingut i Formulari de Reserva (Estructura Unificada) -->
+    <main class="main-layout container">
+      <div class="main-details">
+        <section class="info-block">
+          <h2 class="section-title">Què inclou l'espai?</h2>
+          <div class="amenities-grid">
+            <div class="amenity-item"><span class="amenity-icon">🪴</span><div><strong>Jardí interior</strong><p>Vegetació natural</p></div></div>
+            <div class="amenity-item"><span class="amenity-icon">🪑</span><div><strong>Mobiliari inclòs</strong><p>Taules i cadires adaptables</p></div></div>
+            <div class="amenity-item"><span class="amenity-icon">📶</span><div><strong>Wi-Fi d'alta velocitat</strong><p>Connexió simètrica</p></div></div>
+            <div class="amenity-item"><span class="amenity-icon">📐</span><div><strong>Distribució flexible</strong><p>Taller o reunió</p></div></div>
+          </div>
+        </section>
 
-  <!-- Footer -->
+        <!-- Calendari Interactiu -->
+        <section class="calendar-section">
+          <h2 class="section-title">Calendari de disponibilitat</h2>
+          <div class="calendar-card">
+            <div class="calendar-header">
+              <h3 id="calendar-month-title">Octubre 2026</h3>
+            </div>
+            <div class="slots-header">
+              <strong>Franjes horàries disponibles per a la data seleccionada:</strong>
+            </div>
+            <div id="slots-container" class="slots-grid">
+              <!-- Se generará dinámicamente desde app.js -->
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Formulario de Reserva Flotante (Único) -->
+      <aside class="booking-sidebar">
+        <div class="booking-card">
+          <h2 class="sidebar-title">La teva propera trobada</h2>
+          <form id="form-reserva">
+            <div class="form-group">
+              <label>Data de la reserva</label>
+              <input type="date" id="reserva-data" required onchange="actualitzarCalendariIPreu()">
+            </div>
+            <div class="form-row" style="display: flex; gap: 10px;">
+              <div class="form-group" style="flex: 1;">
+                <label>Hora inici</label>
+                <select id="hora-inici" onchange="actualitzarOpcionsHoraFi()"></select>
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label>Hora fi</label>
+                <select id="hora-fi" onchange="recalcularResumReserva()"></select>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top: 10px;">
+              <label>Correu electrònic</label>
+              <input type="email" id="reserva-email" required placeholder="nom@exemple.cat">
+            </div>
+
+            <!-- Servicios Adicionales -->
+            <h4 class="options-title" style="margin-top: 15px;">Serveis addicionals</h4>
+            <label class="checkbox-card" style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; cursor: pointer;">
+              <input type="checkbox" id="check-catering" onchange="recalcularResumReserva()">
+              <div><strong>Càtering ecològic</strong> (12 €/persona)</div>
+            </label>
+            <label class="checkbox-card" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="check-audiovisual" onchange="recalcularResumReserva()">
+              <div><strong>Equip audiovisual</strong> (80 €)</div>
+            </label>
+
+            <!-- Resumen de Calculadora -->
+            <div class="summary-box" style="margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+              <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span>Durada:</span> <span id="summary-hours">0 hores</span>
+              </div>
+              <div class="summary-line" style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                <span>Subtotal:</span> <span id="summary-subtotal">0,00 €</span>
+              </div>
+              <div class="summary-total-row" style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; border-top: 1px solid #cbd5e1; padding-top: 8px; margin-top: 8px;">
+                <span>Total (IVA 21% inclòs)</span>
+                <strong class="total-price" id="summary-total" style="color: #16a34a;">0,00 €</strong>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-submit-main" style="width: 100%; margin-top: 15px;">Sol·licita la reserva →</button>
+          </form>
+        </div>
+      </aside>
+    </main>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- PASARELA DE PAGO (CHECKOUT) - VISTA CLIENTE AUTENTICADO           -->
+  <!-- ================================================================= -->
+  <section id="checkoutSection" class="view-section" style="display: none;">
+    <div class="container" style="max-width: 650px; margin: 40px auto;">
+      <h1 class="main-title">Passarel·la de Pagament Segura</h1>
+      <p class="subtitle">Revisa els detalls de la teva reserva i completa el pagament.</p>
+
+      <div id="checkoutDetails" class="checkout-box">
+        <!-- Contenido dinámico generado por app.js -->
+      </div>
+
+      <div class="editorial-card" style="margin-top: 20px;">
+        <h3>Dades de Pagament</h3>
+        <form id="form-checkout" onsubmit="event.preventDefault(); processPayment();">
+          <div class="form-group" style="margin-top: 15px;">
+            <label>Titular de la targeta</label>
+            <input type="text" id="pay-name" placeholder="Nom com consta a la targeta" required style="width:100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+          </div>
+          <div class="form-group" style="margin-top: 15px;">
+            <label>Número de targeta</label>
+            <input type="text" id="pay-card" placeholder="4000 1234 5678 9010" required style="width:100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+          </div>
+          <div class="form-row" style="display: flex; gap: 15px; margin-top: 15px;">
+            <div class="form-group" style="flex: 1;">
+              <label>Caducitat</label>
+              <input type="text" placeholder="MM/AA" required style="width:100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+            <div class="form-group" style="flex: 1;">
+              <label>CVC</label>
+              <input type="text" placeholder="123" required style="width:100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px;">
+            </div>
+          </div>
+          <button type="submit" class="btn-submit-main" style="margin-top: 25px;">🔒 Confirmar i Pagar</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- CONFIRMACIÓN DE RESERVA                                          -->
+  <!-- ================================================================= -->
+  <section id="pantalla-confirmacio" class="view-section" style="display:none;">
+    <div class="container" style="max-width: 600px; margin: 40px auto; text-align: center;">
+      <div style="font-size: 3.5rem; color: #16a34a; margin-bottom: 10px;">✓</div>
+      <h1 class="main-title">Reserva Confirmada i Pagada</h1>
+      <p class="subtitle">S'ha generat el teu comprovant de reserva i hem notificat al gestor de l'espai.</p>
+      
+      <div id="detalls-confirmacio" class="editorial-card" style="margin: 25px 0; text-align: left;">
+        <!-- Se llena dinámicamente desde app.js -->
+      </div>
+      
+      <button class="btn-submit-main" onclick="navegarA('pantalla-1')">Tornar al catàleg</button>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- PANTALLA 3: PANELL D'ADMINISTRACIÓ (DASHBOARD EXCLUSIVO ADMIN)   -->
+  <!-- ================================================================= -->
+  <section id="pantalla-3" class="view-section" style="display:none;">
+    <div class="container admin-container">
+      <h1 class="main-title">Panell d'Administració (Dashboard)</h1>
+      <p class="subtitle">Gestió de sol·licituds i resum d'impacte ambiental global.</p>
+
+      <!-- KPI Metrics ambiental e impacto -->
+      <div class="kpi-grid admin-kpis">
+        <div class="kpi-card">
+          <span class="kpi-icon">📅</span>
+          <div>
+            <span class="kpi-value" id="admin-total-reserves">0</span>
+            <span class="kpi-label">Sol·licituds Totals</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-icon">💶</span>
+          <div>
+            <span class="kpi-value" id="admin-total-facturacio">0,00 €</span>
+            <span class="kpi-label">Facturació Acumulada</span>
+          </div>
+        </div>
+
+        <div class="kpi-card highlight">
+          <span class="kpi-icon">🌱</span>
+          <div>
+            <span class="kpi-value" id="admin-total-co2">0.0 kg</span>
+            <span class="kpi-label">CO₂ Evitat (ODS 13)</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <span class="kpi-icon">♻️</span>
+          <div>
+            <span class="kpi-value">18.5 kg</span>
+            <span class="kpi-label">Residus Evitats</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Taula d'Historial de Sol·licituds -->
+      <div class="admin-table-card">
+        <h2 class="section-title">Historial de Sol·licituds de Reserva</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Espai</th>
+              <th>Usuari</th>
+              <th>Data</th>
+              <th>Hores</th>
+              <th>Estat</th>
+              <th>Accions</th>
+            </tr>
+          </thead>
+          <tbody id="taula-reserves-body">
+            <!-- Es carregarà dinàmicament des de app.js -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================================================================= -->
+  <!-- MODAL DE AUTENTICACIÓN (LOGIN / REGISTRO INTERMEDIO)             -->
+  <!-- ================================================================= -->
+  <div id="authModal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeAuthModal()">&times;</span>
+      
+      <div class="auth-tabs" style="display:flex; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0;">
+        <button id="tab-login-btn" class="active" onclick="switchAuthTab('login')" style="flex:1; padding: 10px; border:none; background:none; font-weight:bold; cursor:pointer; border-bottom: 2px solid #16a34a;">Iniciar Sessió</button>
+        <button id="tab-register-btn" onclick="switchAuthTab('register')" style="flex:1; padding: 10px; border:none; background:none; font-weight:bold; cursor:pointer; color:#64748b;">Registrar-se</button>
+      </div>
+
+      <!-- Formulario Login -->
+      <form id="loginForm" onsubmit="handleLogin(event)">
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">Inicia sessió per continuar amb la teva reserva de forma segura.</p>
+        <div class="form-group">
+          <label>Correu electrònic</label>
+          <input type="email" id="authEmail" placeholder="nom@exemple.cat" required />
+        </div>
+        <div class="form-group">
+          <label>Contrasenya</label>
+          <input type="password" id="authPassword" placeholder="••••••••" required />
+        </div>
+        <button type="submit" style="margin-top: 15px;">Iniciar Sessió i Continuar</button>
+      </form>
+
+      <!-- Formulario Registro -->
+      <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
+        <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">Crea un compte ràpidament per completar la teva reserva.</p>
+        <div class="form-group">
+          <label>Nom complet</label>
+          <input type="text" id="regName" placeholder="El teu nom" required />
+        </div>
+        <div class="form-group">
+          <label>Correu electrònic</label>
+          <input type="email" id="regEmail" placeholder="nom@exemple.cat" required />
+        </div>
+        <div class="form-group">
+          <label>Contrasenya</label>
+          <input type="password" id="regPassword" placeholder="••••••••" required />
+        </div>
+        <button type="submit" style="margin-top: 15px;">Crear Compte i Continuar</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer Global -->
   <footer class="footer">
     <div class="container footer-content">
-      <div class="footer-brand">
-        🌿 <strong>ecovenue</strong> <span>L'espai on comencen les bones trobades.</span>
-      </div>
-      <div class="footer-links">
-        <a href="#">Ajuda</a>
-        <a href="#">Privacitat</a>
-        <a href="#">Condicions</a>
-        <span>© 2026 EcoVenue</span>
-      </div>
+      <div>🌿 <strong>ecovenue</strong> — Gestió Sostenible d'Espais</div>
+      <div>© 2026 EcoVenue</div>
     </div>
   </footer>
 

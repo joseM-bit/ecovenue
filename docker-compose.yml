@@ -1,24 +1,18 @@
 version: '3.8'
 
 services:
-  postgres:
-    image: postgres:16-alpine
+  db:
+    image: mysql:8.0
     container_name: ecovenue_db_container
     restart: always
     environment:
-      POSTGRES_USER: ecovenue_user
-      POSTGRES_PASSWORD: ecovenue_pass_123
-      POSTGRES_DB: ecovenue_db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ecovenue
     ports:
-      - "5432:5432"
+      - "3307:3306"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql # Ejecuta el esquema DDL al iniciar
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ecovenue_user -d ecovenue_db"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      - mysqldata:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
   backend:
     build:
@@ -30,10 +24,12 @@ services:
       - "3000:3000"
     environment:
       PORT: 3000
-      DATABASE_URL: postgres://ecovenue_user:ecovenue_pass_123@postgres:5432/ecovenue_db
+      DB_HOST: ecovenue_db_container
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: ecovenue
     depends_on:
-      postgres:
-        condition: service_healthy
+      - db
 
 volumes:
-  pgdata:
+  mysqldata:
